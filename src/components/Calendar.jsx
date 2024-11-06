@@ -1,4 +1,16 @@
 import React, { useState } from "react";
+import netflix from "../assets/netflix.png";
+import spotify from "../assets/spotify.png";
+import basicfit from "../assets/basicfit.png";
+import dropbox from "../assets/dropbox.png";
+import icloud from "../assets/icloud.png";
+import playstation from "../assets/playstation.png";
+import microsoft from "../assets/microsoft.png";
+import crunchyroll from "../assets/crunchyroll.png";
+import linkedin from "../assets/linkedin.png";
+import xbox from "../assets/xbox.png";
+import discord from "../assets/discord.png";
+import amazon from "../assets/amazon.svg";
 
 export const Calendar = () => {
   const dayList = [
@@ -26,40 +38,40 @@ export const Calendar = () => {
   ];
 
   const data = {
-    1: [
-      { name: "Netflix", icon: "icon" },
-      { name: "Spotify", icon: "icon" },
-    ],
-    2: [{ name: "Disney+", icon: "icon" }],
-    3: [{ name: "Amazon Prime", icon: "icon" }],
+    1: [{ name: "Netflix", icon: netflix, price: "€10  " }],
+    2: [],
+    3: [],
     4: [],
-    5: [{ name: "HBO Max", icon: "icon" }],
-    6: [{ name: "Apple Music", icon: "icon" }],
+    5: [{ name: "Basic Fit", icon: basicfit, price: "€10" }],
+    6: [],
     7: [],
-    8: [{ name: "YouTube Premium", icon: "icon" }],
-    9: [{ name: "Hulu", icon: "icon" }],
+    8: [{ name: "Dropbox", icon: dropbox, price: "€10" }],
+    9: [{ name: "ICloud+", icon: icloud, price: "€10" }],
     10: [],
-    11: [{ name: "PlayStation Plus", icon: "icon" }],
-    12: [{ name: "Nintendo Online", icon: "icon" }],
+    11: [
+      { name: "PlayStation Plus", icon: playstation, price: "€10" },
+      { name: "Xbox Game Pass", icon: xbox, price: "€10" },
+    ],
+    12: [],
     13: [],
-    14: [{ name: "Adobe Creative Cloud", icon: "icon" }],
-    15: [{ name: "Microsoft 365", icon: "icon" }],
+    14: [],
+    15: [{ name: "Microsoft 365", icon: microsoft, price: "€10" }],
     16: [],
-    17: [{ name: "Crunchyroll", icon: "icon" }],
-    18: [{ name: "Paramount+", icon: "icon" }],
+    17: [{ name: "Crunchyroll", icon: crunchyroll, price: "€10" }],
+    18: [],
     19: [],
-    20: [{ name: "Apple TV+", icon: "icon" }],
-    21: [{ name: "Xbox Game Pass", icon: "icon" }],
+    20: [{ name: "Linkedin", icon: linkedin, price: "€10" }],
+    21: [],
     22: [],
-    23: [{ name: "Dropbox", icon: "icon" }],
-    24: [{ name: "Google One", icon: "icon" }],
+    23: [],
+    24: [{ name: "Discord", icon: discord, price: "€10" }],
     25: [],
-    26: [{ name: "Peacock", icon: "icon" }],
-    27: [{ name: "EA Play", icon: "icon" }],
+    26: [{ name: "Amazon Prime", icon: amazon, price: "€10" }],
+    27: [],
     28: [],
-    29: [{ name: "Tidal", icon: "icon" }],
-    30: [{ name: "Audible", icon: "icon" }],
-    31: [{ name: "iCloud+", icon: "icon" }],
+    29: [{ name: "Spotify", icon: spotify, price: "€10" }],
+    30: [],
+    31: [],
   };
 
   const now = new Date();
@@ -96,7 +108,7 @@ export const Calendar = () => {
           weekDays.push(
             <div
               key={`prev-${prevMonthStartDay}`}
-              className="w-full aspect-square flex items-end justify-center opacity-40 py-1 bg-zinc-700/20 rounded-[16px]"
+              className="w-full aspect-square flex items-end justify-center opacity-40 py-1 pt-2 h-full  bg-zinc-700/20 rounded-[16px]"
             >
               {String(prevMonthStartDay++).padStart(2, "0")}
             </div>
@@ -105,7 +117,7 @@ export const Calendar = () => {
           weekDays.push(
             <div
               key={`next-${dayCount - daysInMonth}`}
-              className="w-full aspect-square flex items-end justify-center opacity-40 py-1 bg-zinc-700/20 rounded-[16px]"
+              className="w-full aspect-square flex items-end justify-center opacity-40 py-1 pt-2  h-full bg-zinc-700/20 rounded-[16px]"
             >
               {String(dayCount - daysInMonth).padStart(2, "0")}
             </div>
@@ -115,13 +127,20 @@ export const Calendar = () => {
           weekDays.push(
             <div
               key={dayCount}
-              className="w-full aspect-square flex flex-col items-center justify-end py-1 bg-[#1e1e1e] rounded-[16px]"
+              className="w-full aspect-square flex flex-col items-center justify-end py-1 pt-2  h-full bg-[#1e1e1e] rounded-[16px]"
             >
               {data[dayCount] && data[dayCount].length > 0 && (
-                <div className="w-full flex flex-col gap-1">
+                <div className="w-full flex gap-1">
                   {data[dayCount].map((item, index) => (
-                    <div key={index} className="text-xs text-zinc-400 truncate">
-                      {item.name}
+                    <div
+                      key={index}
+                      className="w-full flex items-center justify-center"
+                    >
+                      <img
+                        src={item.icon}
+                        alt={item.name}
+                        className="w-6 h-6 rounded mb-2"
+                      />
                     </div>
                   ))}
                 </div>
@@ -133,7 +152,10 @@ export const Calendar = () => {
         }
       }
       days.push(
-        <div key={`row-${row}`} className="grid grid-cols-7 gap-2 w-full">
+        <div
+          key={`row-${row}`}
+          className="grid grid-cols-7 gap-2 w-full min-h-[75px]"
+        >
           {weekDays}
         </div>
       );
@@ -191,7 +213,7 @@ export const Calendar = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-col gap-2">{generateCalendarDays()}</div>
+      <div className="flex flex-col gap-4">{generateCalendarDays()}</div>
     </div>
   );
 };
