@@ -115,7 +115,7 @@ export const Calendar = () => {
           weekDays.push(
             <div
               key={dayCount}
-              className="w-full aspect-square flex flex-col items-center justify-between p-2 bg-[#1e1e1e] rounded-[16px]"
+              className="w-full aspect-square flex flex-col items-center justify-end py-1 bg-[#1e1e1e] rounded-[16px]"
             >
               {data[dayCount] && data[dayCount].length > 0 && (
                 <div className="w-full flex flex-col gap-1">
@@ -177,8 +177,8 @@ export const Calendar = () => {
           </h2>
         </div>
         <div className="flex flex-col items-end">
-          <span className="text-md sm:text-lg opacity-50">Monthly spend</span>
-          <span className="text-lg sm:text-xl font-semibold">$63.23</span>
+          <span className="text-sm sm:text-md opacity-50">Monthly spend</span>
+          <span className="text-lg sm:text-xl font-semibold">€63.23</span>
         </div>
       </div>
       <div className="grid grid-cols-7 gap-1">
