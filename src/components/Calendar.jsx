@@ -11,6 +11,7 @@ import linkedin from "../assets/linkedin.png";
 import xbox from "../assets/xbox.png";
 import discord from "../assets/discord.png";
 import amazon from "../assets/amazon.svg";
+import Dialog from "@mui/material/Dialog";
 
 export const Calendar = () => {
   const dayList = [
@@ -36,8 +37,7 @@ export const Calendar = () => {
     "November",
     "December",
   ];
-
-  const data = {
+  const dataDefault = {
     1: [{ name: "Netflix", icon: netflix, price: "€10  " }],
     2: [],
     3: [],
@@ -130,16 +130,22 @@ export const Calendar = () => {
               className="w-full aspect-square flex flex-col items-center justify-end py-1 pt-2  h-full bg-[#1e1e1e] rounded-[16px]"
             >
               {data[dayCount] && data[dayCount].length > 0 && (
-                <div className="w-full flex gap-1">
+                <div
+                  onClick={handleClick}
+                  value={dayCount}
+                  className="w-full flex hover:cursor-pointer"
+                >
                   {data[dayCount].map((item, index) => (
                     <div
+                      value={dayCount}
                       key={index}
                       className="w-full flex items-center justify-center"
                     >
                       <img
                         src={item.icon}
                         alt={item.name}
-                        className="w-6 h-6 rounded mb-2"
+                        value={dayCount}
+                        className="w-6 h-6 rounded mb-2 "
                       />
                     </div>
                   ))}
@@ -176,6 +182,32 @@ export const Calendar = () => {
     }
   };
 
+  const handleClick = (e) => {
+    let value = e.target.getAttribute("value");
+    console.log(data[value]);
+    setCurrentItem(data[value]);
+    setCurrentItemIndex(value);
+    setOpen(true);
+  };
+  const handleDeleteSub = () => {
+    console.log(currentItemIndex);
+    let newData = { ...data };
+    newData[currentItemIndex] = [];
+    setData(newData);
+    setCurrentItem(null);
+    setCurrentItemIndex(null);
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const [open, setOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+  const [currentItemIndex, setCurrentItemIndex] = useState(null);
+
+  const [data, setData] = useState(dataDefault);
+
   return (
     <div className="w-full max-w-lg flex flex-col gap-4">
       <div className="w-full flex items-center justify-between gap-4">
@@ -203,7 +235,7 @@ export const Calendar = () => {
           <span className="text-lg sm:text-xl font-semibold">€63.23</span>
         </div>
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-2">
         {dayList.map((day, key) => (
           <div
             key={key}
@@ -213,7 +245,53 @@ export const Calendar = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-col gap-4">{generateCalendarDays()}</div>
+      <div className="flex flex-col gap-4 ">{generateCalendarDays()}</div>
+      <Dialog open={open} onClose={handleClose} className="rounded-[16px]  ">
+        <div className="flex flex-col mx-auto max-w-lg min-w-[300px]   my-auto gap-4 bg-[#1e1e1e] p-4">
+          {currentItem &&
+            currentItem.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-6 border-b border-[#323232]-"
+              >
+                <div className="flex justify-between items-center gap-2">
+                  <span className="flex items-center gap-2">
+                    <img
+                      src={item.icon}
+                      alt={item.name}
+                      className="w-10 h-10"
+                    />
+                    <h2 className="text-2xl font-semibold text-white">
+                      {item.name}
+                    </h2>
+                  </span>
+
+                  <span className="text-2xl font-semibold text-white">
+                    {item.price}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-sm text-white">Every xth</span>
+                  <span className="text-sm text-white opacity-60">
+                    Next payment
+                  </span>
+                </div>
+                <div className="flex justify-between items-center gap-2 mb-2">
+                  <span className="text-sm text-white">
+                    Total since 2022-01-08
+                  </span>
+                  <span className="text-sm text-white ">€63.23</span>
+                </div>
+              </div>
+            ))}
+          <button
+            onClick={handleDeleteSub}
+            className="bg-red-500/10 border-2 border-red-500 text-red-500 rounded-lg font-semibold w-full p-2 "
+          >
+            Cancel Subscription
+          </button>
+        </div>
+      </Dialog>
     </div>
   );
 };
