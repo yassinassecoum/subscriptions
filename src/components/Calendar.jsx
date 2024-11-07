@@ -11,7 +11,8 @@ import linkedin from "../assets/linkedin.png";
 import xbox from "../assets/xbox.png";
 import discord from "../assets/discord.png";
 import amazon from "../assets/amazon.svg";
-import Dialog from "@mui/material/Dialog";
+import { AddSubscriptionDialog } from "./AddSubscriptionDialog";
+import { ViewDayDialog } from "./ViewDayDialog";
 
 export const Calendar = () => {
   const dayList = [
@@ -38,7 +39,15 @@ export const Calendar = () => {
     "December",
   ];
   const dataDefault = {
-    1: [{ name: "Netflix", icon: netflix, price: "€10", color: "#ff5a5f20" }],
+    1: [
+      {
+        name: "Netflix",
+        icon: netflix,
+        price: "€10",
+        color: "#ff5a5f20",
+        since: "",
+      },
+    ],
     2: [],
     3: [],
     4: [],
@@ -101,6 +110,11 @@ export const Calendar = () => {
   const [selectedMonth, setSelectedMonth] = useState(months[currentMonth]);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
   const [selectedDay, setSelectedDay] = useState(null);
+  const [openDay, setOpenDay] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+  const [currentItemIndex, setCurrentItemIndex] = useState(null);
+  const [data, setData] = useState(dataDefault);
   const monthNow = new Date(selectedYear, months.indexOf(selectedMonth));
   const firstDayOfMonth = monthNow.getDay() - 1;
   const daysInMonth = new Date(
@@ -154,7 +168,7 @@ export const Calendar = () => {
             >
               {data[dayCount] && data[dayCount].length > 0 && (
                 <div
-                  onClick={handleClick}
+                  onClick={handleClickDay}
                   value={dayCount}
                   className="w-full flex justify-center hover:cursor-pointer "
                 >
@@ -168,7 +182,7 @@ export const Calendar = () => {
                         src={item.icon}
                         alt={item.name}
                         value={dayCount}
-                        className="size-4 sm:size-6 rounded mb-2 "
+                        className="size-4 sm:size-5 md:size-6 rounded mb-2 "
                       />
                     </div>
                   ))}
@@ -205,14 +219,12 @@ export const Calendar = () => {
     }
   };
 
-  const handleClick = (e) => {
+  const handleClickDay = (e) => {
     let value = e.target.getAttribute("value");
-    console.log(value);
-    console.log(data[value]);
     setCurrentItem(data[value]);
     setSelectedDay(value);
     setCurrentItemIndex(value);
-    setOpen(true);
+    setOpenDay(true);
   };
   const handleDeleteSub = () => {
     console.log(currentItemIndex);
@@ -221,17 +233,12 @@ export const Calendar = () => {
     setData(newData);
     setCurrentItem(null);
     setCurrentItemIndex(null);
-    setOpen(false);
+    setOpenDay(false);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseDay = () => {
+    setOpenDay(false);
   };
-  const [open, setOpen] = useState(false);
-  const [currentItem, setCurrentItem] = useState(null);
-  const [currentItemIndex, setCurrentItemIndex] = useState(null);
-
-  const [data, setData] = useState(dataDefault);
 
   return (
     <div className="w-full max-w-lg flex flex-col gap-4">
@@ -273,92 +280,22 @@ export const Calendar = () => {
         ))}
       </div>
       <div className="flex flex-col gap-4 ">{generateCalendarDays()}</div>
-      <Dialog open={open} onClose={handleClose}>
-        <div className="flex flex-col mx-auto max-w-lg min-w-[350px] min-h-[550px]  my-auto gap-3 bg-[#1e1e1e] px-4 py-4 rounded-xl border-2 border-[#323232] shadow-md h-[550px] overflow-x-h">
-          <button
-            onClick={handleClose}
-            className="absolute top-3 bg-white/10 justify-center right-3 size-8 rounded-full flex items-center p-1.5 text-white text-lg cursor-pointer"
-          >
-            x
-          </button>
-          <h2 className="text-white text-xl font-semibold text-center italic">
-            {selectedDay + " " + selectedMonth + " " + selectedYear}
-          </h2>
-
-          <div className="flex gap-4 justify-center ">
-            {currentItem &&
-              currentItem.map((item, index) => (
-                <div
-                  style={{
-                    backgroundColor: item.color ? item.color : "#323232",
-                  }}
-                  className={`size-14 rounded-lg flex items-center justify-center`}
-                >
-                  <img
-                    src={item.icon}
-                    key={index}
-                    alt={item.name}
-                    className={`size-9`}
-                  />
-                </div>
-              ))}
-          </div>
-          {currentItem &&
-            currentItem.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col gap-2 border-t border-dashed border-[#323232] pt-4"
-              >
-                <div className="flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2 mr-12">
-                    <img src={item.icon} alt={item.name} className="size-8" />
-                    <h2 className="text-2xl font-semibold text-white">
-                      {item.name}
-                    </h2>
-                  </span>
-
-                  <span className="text-2xl font-semibold text-white">
-                    {item.price}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center gap-2">
-                  <span className="text-sm text-white">Every xth</span>
-                  <span className="text-sm text-white opacity-60">
-                    Next payment
-                  </span>
-                </div>
-                <div className="flex justify-between items-center gap-2 mb-2">
-                  <span className="text-sm text-white">
-                    Total since 2022-01-08
-                  </span>
-                  <span className="text-md font-semibold text-white ">
-                    €63.23
-                  </span>
-                </div>
-              </div>
-            ))}
-          <div className="flex flex-col gap-4 w-full mt-auto border-t border-dashed border-[#323232] pt-4">
-            <div className="flex justify-between">
-              <span className="text-white/30 text-lg">Total Spend</span>
-              <span className="text-white text-2xl font-semibold">€63.23</span>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleDeleteSub}
-                className="bg-red-500/10 border-2 border-red-500 text-red-500 rounded-lg font-semibold w-full p-2   "
-              >
-                Cancel Subscription
-              </button>
-              <button
-                onClick={() => {}}
-                className="border-2 border-[#5e5e5e] text-[#5e5e5e]  rounded-lg font-semibold p-2   "
-              >
-                Pause
-              </button>
-            </div>
-          </div>
-        </div>
-      </Dialog>
+      <button
+        className="bg-white/10 border-2 border-[#5e5e5e]   rounded-lg font-semibold p-2   "
+        onClick={() => setOpenAdd(true)}
+      >
+        Add Subscription
+      </button>
+      <AddSubscriptionDialog open={openAdd} onClose={() => setOpenAdd(false)} />
+      <ViewDayDialog
+        open={openDay}
+        onClose={handleCloseDay}
+        selectedDay={selectedDay}
+        selectedMonth={selectedMonth}
+        selectedYear={selectedYear}
+        currentItem={currentItem}
+        onDeleteSub={handleDeleteSub}
+      />
     </div>
   );
 };
@@ -367,3 +304,4 @@ export const Calendar = () => {
 // add a button to add a new subscription
 //rework icons
 // responsive
+// refactor
