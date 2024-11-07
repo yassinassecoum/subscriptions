@@ -38,38 +38,60 @@ export const Calendar = () => {
     "December",
   ];
   const dataDefault = {
-    1: [{ name: "Netflix", icon: netflix, price: "€10  " }],
+    1: [{ name: "Netflix", icon: netflix, price: "€10", color: "#ff5a5f20" }],
     2: [],
     3: [],
     4: [],
-    5: [{ name: "Basic Fit", icon: basicfit, price: "€10" }],
+    5: [
+      { name: "Basic Fit", icon: basicfit, price: "€10", color: "#ff885a20" },
+    ],
     6: [],
     7: [],
-    8: [{ name: "Dropbox", icon: dropbox, price: "€10" }],
-    9: [{ name: "ICloud+", icon: icloud, price: "€10" }],
+    8: [],
+    9: [
+      { name: "Dropbox", icon: dropbox, price: "€10", color: "#0077b520" },
+      { name: "ICloud+", icon: icloud, price: "€10" },
+      { name: "Microsoft", icon: microsoft, price: "€10", color: "#0077b520" },
+    ],
     10: [],
     11: [
-      { name: "PlayStation Plus", icon: playstation, price: "€10" },
-      { name: "Xbox Game Pass", icon: xbox, price: "€10" },
+      { name: "Xbox+", icon: xbox, price: "€10", color: "#3ecf8e20" },
+      { name: "PlayStation+", icon: playstation, price: "€10" },
     ],
     12: [],
     13: [],
     14: [],
-    15: [{ name: "Microsoft 365", icon: microsoft, price: "€10" }],
+    15: [
+      {
+        name: "Crunchyroll",
+        icon: crunchyroll,
+        price: "€10",
+        color: "#ff885a20",
+      },
+    ],
     16: [],
-    17: [{ name: "Crunchyroll", icon: crunchyroll, price: "€10" }],
+    17: [],
     18: [],
-    19: [],
-    20: [{ name: "Linkedin", icon: linkedin, price: "€10" }],
+    19: [
+      { name: "Linkedin", icon: linkedin, price: "€10", color: "#0077b520" },
+    ],
+    20: [],
     21: [],
-    22: [],
+    22: [{ name: "Discord", icon: discord, price: "€10", color: "#7289da20" }],
     23: [],
-    24: [{ name: "Discord", icon: discord, price: "€10" }],
-    25: [],
-    26: [{ name: "Amazon Prime", icon: amazon, price: "€10" }],
+    24: [],
+    25: [{ name: "Amazon", icon: amazon, price: "€10" }],
+    26: [],
     27: [],
-    28: [],
-    29: [{ name: "Spotify", icon: spotify, price: "€10" }],
+    28: [
+      {
+        name: "Spotify",
+        icon: spotify,
+        price: "€10",
+        color: "rgba(62, 207, 142, 0.125)",
+      },
+    ],
+    29: [],
     30: [],
     31: [],
   };
@@ -78,6 +100,7 @@ export const Calendar = () => {
   const currentMonth = now.getMonth();
   const [selectedMonth, setSelectedMonth] = useState(months[currentMonth]);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+  const [selectedDay, setSelectedDay] = useState(null);
   const monthNow = new Date(selectedYear, months.indexOf(selectedMonth));
   const firstDayOfMonth = monthNow.getDay() - 1;
   const daysInMonth = new Date(
@@ -133,7 +156,7 @@ export const Calendar = () => {
                 <div
                   onClick={handleClick}
                   value={dayCount}
-                  className="w-full flex hover:cursor-pointer"
+                  className="w-full flex justify-center hover:cursor-pointer "
                 >
                   {data[dayCount].map((item, index) => (
                     <div
@@ -145,7 +168,7 @@ export const Calendar = () => {
                         src={item.icon}
                         alt={item.name}
                         value={dayCount}
-                        className="w-6 h-6 rounded mb-2 "
+                        className="size-4 sm:size-6 rounded mb-2 "
                       />
                     </div>
                   ))}
@@ -160,7 +183,7 @@ export const Calendar = () => {
       days.push(
         <div
           key={`row-${row}`}
-          className="grid grid-cols-7 gap-2 w-full min-h-[75px]"
+          className="grid grid-cols-7 gap-1 sm:gap-2 w-full min-h-[75px]"
         >
           {weekDays}
         </div>
@@ -184,8 +207,10 @@ export const Calendar = () => {
 
   const handleClick = (e) => {
     let value = e.target.getAttribute("value");
+    console.log(value);
     console.log(data[value]);
     setCurrentItem(data[value]);
+    setSelectedDay(value);
     setCurrentItemIndex(value);
     setOpen(true);
   };
@@ -231,7 +256,9 @@ export const Calendar = () => {
           </h2>
         </div>
         <div className="flex flex-col items-end">
-          <span className="text-sm sm:text-md opacity-50">Monthly spend</span>
+          <span className="text-sm sm:text-md opacity-50 text-nowrap">
+            Monthly spend
+          </span>
           <span className="text-lg sm:text-xl font-semibold">€63.23</span>
         </div>
       </div>
@@ -246,21 +273,45 @@ export const Calendar = () => {
         ))}
       </div>
       <div className="flex flex-col gap-4 ">{generateCalendarDays()}</div>
-      <Dialog open={open} onClose={handleClose} className="rounded-[16px]  ">
-        <div className="flex flex-col mx-auto max-w-lg min-w-[300px]   my-auto gap-4 bg-[#1e1e1e] p-4">
+      <Dialog open={open} onClose={handleClose}>
+        <div className="flex flex-col mx-auto max-w-lg min-w-[350px] min-h-[550px]  my-auto gap-3 bg-[#1e1e1e] px-4 py-4 rounded-xl border-2 border-[#323232] shadow-md h-[550px] overflow-x-h">
+          <button
+            onClick={handleClose}
+            className="absolute top-3 bg-white/10 justify-center right-3 size-8 rounded-full flex items-center p-1.5 text-white text-lg cursor-pointer"
+          >
+            x
+          </button>
+          <h2 className="text-white text-xl font-semibold text-center italic">
+            {selectedDay + " " + selectedMonth + " " + selectedYear}
+          </h2>
+
+          <div className="flex gap-4 justify-center ">
+            {currentItem &&
+              currentItem.map((item, index) => (
+                <div
+                  style={{
+                    backgroundColor: item.color ? item.color : "#323232",
+                  }}
+                  className={`size-14 rounded-lg flex items-center justify-center`}
+                >
+                  <img
+                    src={item.icon}
+                    key={index}
+                    alt={item.name}
+                    className={`size-9`}
+                  />
+                </div>
+              ))}
+          </div>
           {currentItem &&
             currentItem.map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col gap-6 border-b border-[#323232]-"
+                className="flex flex-col gap-2 border-t border-dashed border-[#323232] pt-4"
               >
                 <div className="flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2">
-                    <img
-                      src={item.icon}
-                      alt={item.name}
-                      className="w-10 h-10"
-                    />
+                  <span className="flex items-center gap-2 mr-12">
+                    <img src={item.icon} alt={item.name} className="size-8" />
                     <h2 className="text-2xl font-semibold text-white">
                       {item.name}
                     </h2>
@@ -280,20 +331,39 @@ export const Calendar = () => {
                   <span className="text-sm text-white">
                     Total since 2022-01-08
                   </span>
-                  <span className="text-sm text-white ">€63.23</span>
+                  <span className="text-md font-semibold text-white ">
+                    €63.23
+                  </span>
                 </div>
               </div>
             ))}
-          <button
-            onClick={handleDeleteSub}
-            className="bg-red-500/10 border-2 border-red-500 text-red-500 rounded-lg font-semibold w-full p-2 "
-          >
-            Cancel Subscription
-          </button>
+          <div className="flex flex-col gap-4 w-full mt-auto border-t border-dashed border-[#323232] pt-4">
+            <div className="flex justify-between">
+              <span className="text-white/30 text-lg">Total Spend</span>
+              <span className="text-white text-2xl font-semibold">€63.23</span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleDeleteSub}
+                className="bg-red-500/10 border-2 border-red-500 text-red-500 rounded-lg font-semibold w-full p-2   "
+              >
+                Cancel Subscription
+              </button>
+              <button
+                onClick={() => {}}
+                className="border-2 border-[#5e5e5e] text-[#5e5e5e]  rounded-lg font-semibold p-2   "
+              >
+                Pause
+              </button>
+            </div>
+          </div>
         </div>
       </Dialog>
     </div>
   );
 };
 
-// maybe add popover when hovering over the item
+// monthly spend
+// add a button to add a new subscription
+//rework icons
+// responsive

@@ -6,3 +6,6 @@
 body {
   font-family: "Sora", sans-serif;
 }
+.css-10d30g3-MuiPaper-root-MuiDialog-paper {
+  background-color: transparent !important;
+}
