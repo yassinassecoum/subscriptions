@@ -43,29 +43,59 @@ export const Calendar = () => {
       {
         name: "Netflix",
         icon: netflix,
-        price: "€10",
+        price: "12.99",
         color: "#ff5a5f20",
-        since: "",
+        since: "01-09-2021",
       },
     ],
     2: [],
     3: [],
     4: [],
     5: [
-      { name: "Basic Fit", icon: basicfit, price: "€10", color: "#ff885a20" },
+      {
+        name: "Basic Fit",
+        icon: basicfit,
+        price: "24.99",
+        color: "#ff885a20",
+        since: "05-12-2022",
+      },
     ],
     6: [],
     7: [],
     8: [],
     9: [
-      { name: "Dropbox", icon: dropbox, price: "€10", color: "#0077b520" },
-      { name: "ICloud+", icon: icloud, price: "€10" },
-      { name: "Microsoft", icon: microsoft, price: "€10", color: "#0077b520" },
+      {
+        name: "Dropbox",
+        icon: dropbox,
+        price: "6.99",
+        color: "#0077b520",
+        since: "09-09-2023",
+      },
+      { name: "ICloud+", icon: icloud, price: "4.99", since: "09-09-2023" },
+      {
+        name: "Microsoft",
+        icon: microsoft,
+        price: "11",
+        color: "#0077b520",
+        since: "09-12-2023",
+      },
     ],
     10: [],
     11: [
-      { name: "Xbox+", icon: xbox, price: "€10", color: "#3ecf8e20" },
-      { name: "PlayStation+", icon: playstation, price: "€10" },
+      {
+        name: "Xbox+",
+        icon: xbox,
+        price: "11",
+        color: "#3ecf8e20",
+        since: "11-09-2023",
+      },
+      {
+        name: "PlayStation+",
+        icon: playstation,
+        price: "14.99",
+        color: "#3ecf8e20",
+        since: "11-09-2023",
+      },
     ],
     12: [],
     13: [],
@@ -74,30 +104,54 @@ export const Calendar = () => {
       {
         name: "Crunchyroll",
         icon: crunchyroll,
-        price: "€10",
+        price: "15",
         color: "#ff885a20",
+        since: "15-03-2024",
       },
     ],
     16: [],
     17: [],
     18: [],
     19: [
-      { name: "Linkedin", icon: linkedin, price: "€10", color: "#0077b520" },
+      {
+        name: "Linkedin",
+        icon: linkedin,
+        price: "12.99",
+        color: "#0077b520",
+        since: "19-04-2024",
+      },
     ],
     20: [],
     21: [],
-    22: [{ name: "Discord", icon: discord, price: "€10", color: "#7289da20" }],
+    22: [
+      {
+        name: "Discord",
+        icon: discord,
+        price: "7.99",
+        color: "#7289da20",
+        since: "22-05-2024",
+      },
+    ],
     23: [],
     24: [],
-    25: [{ name: "Amazon", icon: amazon, price: "€10" }],
+    25: [
+      {
+        name: "Amazon",
+        icon: amazon,
+        price: "2.99",
+        color: "#ff990020",
+        since: "25-06-2024",
+      },
+    ],
     26: [],
     27: [],
     28: [
       {
         name: "Spotify",
         icon: spotify,
-        price: "€10",
+        price: "9.99",
         color: "rgba(62, 207, 142, 0.125)",
+        since: "28-07-2024",
       },
     ],
     29: [],
@@ -163,15 +217,13 @@ export const Calendar = () => {
         } else {
           weekDays.push(
             <div
+              onClick={handleClickDay}
+              value={dayCount}
               key={dayCount}
-              className="w-full aspect-square flex flex-col items-center justify-end py-1 pt-2  h-full bg-[#1e1e1e] rounded-[16px]"
+              className="w-full aspect-square flex flex-col items-center justify-end py-1 pt-2  h-full bg-[#1e1e1e] rounded-[16px] hover:cursor-pointer"
             >
               {data[dayCount] && data[dayCount].length > 0 && (
-                <div
-                  onClick={handleClickDay}
-                  value={dayCount}
-                  className="w-full flex justify-center hover:cursor-pointer "
-                >
+                <div value={dayCount} className="w-full flex justify-center  ">
                   {data[dayCount].map((item, index) => (
                     <div
                       value={dayCount}
@@ -182,7 +234,7 @@ export const Calendar = () => {
                         src={item.icon}
                         alt={item.name}
                         value={dayCount}
-                        className="size-4 sm:size-5 md:size-6 rounded mb-2 "
+                        className="size-5 sm:size-6 rounded mb-2 "
                       />
                     </div>
                   ))}
@@ -206,6 +258,14 @@ export const Calendar = () => {
     return days;
   };
 
+  const generateMonthlySpend = () => {
+    let total = 0;
+    for (const day in data) {
+      total += data[day].reduce((acc, item) => acc + parseFloat(item.price), 0);
+    }
+    return total;
+  };
+
   const handleIncrement = (val) => {
     const numericMonth = months.indexOf(selectedMonth);
     if (numericMonth + val < 0) {
@@ -221,12 +281,19 @@ export const Calendar = () => {
 
   const handleClickDay = (e) => {
     let value = e.target.getAttribute("value");
-    setCurrentItem(data[value]);
-    setSelectedDay(value);
-    setCurrentItemIndex(value);
-    setOpenDay(true);
+    if (data[value] && data[value].length > 0) {
+      setCurrentItem(data[value]);
+      setSelectedDay(value);
+      setCurrentItemIndex(value);
+      setOpenDay(true);
+    } else {
+      setCurrentItem(null);
+      setSelectedDay(value);
+      setCurrentItemIndex(value);
+      setOpenDay(true);
+    }
   };
-  const handleDeleteSub = () => {
+  const handleDeleteSubscriptions = () => {
     console.log(currentItemIndex);
     let newData = { ...data };
     newData[currentItemIndex] = [];
@@ -235,9 +302,39 @@ export const Calendar = () => {
     setCurrentItemIndex(null);
     setOpenDay(false);
   };
+  const handleDeleteSub = (id) => {
+    let newData = { ...data };
+    newData[currentItemIndex].splice(id, 1);
+    if (newData[currentItemIndex].length === 0) {
+      setCurrentItem(null);
+      setCurrentItemIndex(null);
+    }
+    setData(newData);
+  };
 
   const handleCloseDay = () => {
     setOpenDay(false);
+  };
+
+  const addNewSub = (sub) => {
+    if (
+      sub.name !== "" &&
+      sub.price !== "" &&
+      sub.startDate !== "" &&
+      sub.icon !== ""
+    ) {
+      const newSub = {
+        name: sub.name,
+        icon: `https://cdn.brandfetch.io/${sub.name}.com/w/400/h/400?c=1id_jxkZ-0w6eMg_xfA`,
+        price: sub.price,
+        color: sub.color ? sub.color : "#323232",
+        since: sub.startDate,
+      };
+      let newData = { ...data };
+      newData[sub.day] = [...newData[sub.day], newSub];
+      setData(newData);
+      setOpenAdd(false);
+    }
   };
 
   return (
@@ -266,7 +363,9 @@ export const Calendar = () => {
           <span className="text-sm sm:text-md opacity-50 text-nowrap">
             Monthly spend
           </span>
-          <span className="text-lg sm:text-xl font-semibold">€63.23</span>
+          <span className="text-lg sm:text-xl font-semibold">
+            {generateMonthlySpend().toFixed(2)}€
+          </span>
         </div>
       </div>
       <div className="grid grid-cols-7 gap-2">
@@ -284,9 +383,13 @@ export const Calendar = () => {
         className="bg-white/10 border-2 border-[#5e5e5e]   rounded-lg font-semibold p-2   "
         onClick={() => setOpenAdd(true)}
       >
-        Add Subscription
+        Add Subscription +
       </button>
-      <AddSubscriptionDialog open={openAdd} onClose={() => setOpenAdd(false)} />
+      <AddSubscriptionDialog
+        addNewSub={addNewSub}
+        open={openAdd}
+        onClose={() => setOpenAdd(false)}
+      />
       <ViewDayDialog
         open={openDay}
         onClose={handleCloseDay}
@@ -294,14 +397,12 @@ export const Calendar = () => {
         selectedMonth={selectedMonth}
         selectedYear={selectedYear}
         currentItem={currentItem}
-        onDeleteSub={handleDeleteSub}
+        onDeleteSubscriptions={handleDeleteSubscriptions}
+        handleDeleteSub={handleDeleteSub}
       />
     </div>
   );
 };
 
-// monthly spend
-// add a button to add a new subscription
-//rework icons
 // responsive
 // refactor

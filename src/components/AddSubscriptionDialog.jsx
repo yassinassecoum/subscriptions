@@ -1,6 +1,12 @@
 import Dialog from "@mui/material/Dialog";
+import { useState } from "react";
+export function AddSubscriptionDialog({ open, onClose, addNewSub }) {
+  const [name, setName] = useState("");
+  const [day, setDay] = useState(1);
+  const [startDate, setStartDate] = useState("");
+  const [price, setPrice] = useState("");
+  const [color, setColor] = useState("");
 
-export function AddSubscriptionDialog({ open, onClose }) {
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="flex flex-col mx-auto max-w-lg min-w-[350px] min-h-[550px] my-auto gap-3 bg-[#1e1e1e] px-4 pt-4 pb-4 rounded-xl border-2 border-[#323232] shadow-md overflow-x-h">
@@ -21,12 +27,18 @@ export function AddSubscriptionDialog({ open, onClose }) {
                 type="text"
                 className="bg-[#323232] text-white rounded-lg p-2 border border-[#5e5e5e] focus:outline-none focus:border-white"
                 placeholder="Netflix, Spotify, etc..."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-white text-sm">Day of subscription</label>
-              <select className="bg-[#323232] text-white rounded-lg p-2 border border-[#5e5e5e] focus:outline-none focus:border-white">
+              <select
+                className="bg-[#323232] text-white rounded-lg p-2 border border-[#5e5e5e] focus:outline-none focus:border-white"
+                value={day}
+                onChange={(e) => setDay(e.target.value)}
+              >
                 {[...Array(31)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {String(i + 1).padStart(2, "0")}
@@ -40,18 +52,10 @@ export function AddSubscriptionDialog({ open, onClose }) {
               <input
                 type="date"
                 className="bg-[#323232] text-white rounded-lg p-2 border border-[#5e5e5e] focus:outline-none focus:border-white"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-white text-sm">Icon</label>
-              <input
-                type="file"
-                accept="image/*"
-                className="bg-[#323232] text-white rounded-lg p-2 border border-[#5e5e5e] focus:outline-none focus:border-white file:bg-[#5e5e5e] file:text-white file:border-0 file:rounded-lg file:px-4 file:py-2 file:mr-4 file:cursor-pointer"
-              />
-            </div>
-
             <div className="flex flex-col gap-2">
               <label className="text-white text-sm">Price</label>
               <div className="relative">
@@ -64,6 +68,8 @@ export function AddSubscriptionDialog({ open, onClose }) {
                   step="0.01"
                   className="bg-[#323232] text-white rounded-lg p-2 pl-8 border border-[#5e5e5e] focus:outline-none focus:border-white w-full"
                   placeholder="0.00"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
             </div>
@@ -73,10 +79,15 @@ export function AddSubscriptionDialog({ open, onClose }) {
               <input
                 type="color"
                 className="bg-[#323232] h-10 rounded-lg p-1 border border-[#5e5e5e] focus:outline-none focus:border-white"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
               />
             </div>
 
-            <button className="bg-white/10 border-2 border-[#5e5e5e] rounded-lg font-semibold p-2 text-white mt-4 hover:bg-white/20">
+            <button
+              onClick={() => addNewSub({ name, day, startDate, price, color })}
+              className="bg-white/10 border-2 border-[#5e5e5e] rounded-lg font-semibold p-2 text-white mt-4 hover:bg-white/20"
+            >
               Add Subscription
             </button>
           </div>
