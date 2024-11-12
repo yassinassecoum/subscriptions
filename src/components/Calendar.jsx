@@ -339,7 +339,36 @@ export const Calendar = () => {
 
   return (
     <div className="w-full max-w-lg flex flex-col gap-4">
-      <div className="w-full flex items-center justify-between gap-4">
+      {/* mobile navigation */}
+      <div className="flex justify-center items-center gap-2 sm:hidden">
+        <button
+          className="bg-[#323232] rounded-full p-2 w-10"
+          onClick={() => handleIncrement(-1)}
+        >
+          <i className="fa-solid fa-chevron-left fa-xs"></i>
+        </button>
+        <h2 className="ml-2 sm:text-3xl tracking-wider text-lg flex items-center justify-start gap-1 font-bold text-zinc-300">
+          {selectedMonth}
+          <span className="opacity-50"> {selectedYear}</span>
+        </h2>
+        <button
+          className="bg-[#323232] rounded-full p-2 w-10"
+          onClick={() => handleIncrement(1)}
+        >
+          <i className="fa-solid fa-chevron-right fa-xs"></i>
+        </button>
+      </div>
+      {/* mobile monthly spend */}
+      <div className="flex flex-col items-center sm:hidden">
+        <span className="text-sm sm:text-md opacity-50 text-nowrap">
+          Monthly spend
+        </span>
+        <span className="text-lg sm:text-xl font-semibold">
+          {generateMonthlySpend().toFixed(2)}€
+        </span>
+      </div>
+
+      <div className="w-full flex items-center justify-between gap-4 hidden sm:flex">
         <div className="flex items-center gap-2">
           <button
             className="bg-[#323232] rounded-full p-2 w-10"
@@ -359,7 +388,7 @@ export const Calendar = () => {
             <span className="opacity-50"> {selectedYear}</span>
           </h2>
         </div>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-end ">
           <span className="text-sm sm:text-md opacity-50 text-nowrap">
             Monthly spend
           </span>
@@ -368,6 +397,7 @@ export const Calendar = () => {
           </span>
         </div>
       </div>
+
       <div className="grid grid-cols-7 gap-2">
         {dayList.map((day, key) => (
           <div
