@@ -9,3 +9,10 @@ body {
 .css-10d30g3-MuiPaper-root-MuiDialog-paper {
   background-color: transparent !important;
 }
+
+.MuiPaper-root {
+  background-color: transparent !important;
+}
+.MuiDialog-paper {
+  background-color: transparent !important;
+}
