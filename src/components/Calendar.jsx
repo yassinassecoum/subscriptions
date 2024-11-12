@@ -328,7 +328,7 @@ export const Calendar = () => {
         icon: `https://cdn.brandfetch.io/${sub.name}.com/w/400/h/400?c=1id_jxkZ-0w6eMg_xfA`,
         price: sub.price,
         color: sub.color ? sub.color : "#323232",
-        since: sub.startDate,
+        since: sub.startDate.split("-").reverse().join("-"),
       };
       let newData = { ...data };
       newData[sub.day] = [...newData[sub.day], newSub];
